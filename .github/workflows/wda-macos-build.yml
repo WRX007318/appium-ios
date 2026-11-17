@@ -1,0 +1,194 @@
+# 真机 WDA 构建 v2：Appium 新 monorepo（原 appium/WebDriverAgent 已归档）。
+# 只从官方源码构建、锁定 commit、云端 macOS、不签名、不含任何机密。
+# 用法：放进【你自己的】 appium/appium-ios fork 的 .github/workflows/ 目录，手动 Run，下载 artifact。
+# 产物：未签名通用 WebDriverAgentRunner-Runner.app（zip），后续用 Sideloadly + 你的免费 Apple ID 本地重签。
+
+name: Build WDA for real iOS device (appium-ios monorepo, pinned commit)
+
+on:
+  workflow_dispatch:
+
+env:
+  WDA_REPO: appium/appium-ios
+  WDA_TAG: appium-webdriveragent@17.0.11
+  WDA_COMMIT: 582beec62211b41800a9dd32f8e91cced0228158
+  WDA_PKG_VERSION: 17.0.11
+  SCHEME: WebDriverAgentRunner
+  DERIVED_DATA_PATH: appium_wda_ios
+  WD: appium_wda_ios/Build/Products/Debug-iphoneos
+  ZIP_PKG_NAME_IOS: "WebDriverAgentRunner-Runner.zip"
+
+# 官方新 CI 在 packages/webdriveragent 目录内执行构建脚本，这里统一工作目录
+defaults:
+  run:
+    working-directory: packages/webdriveragent
+
+jobs:
+  for_real_ios_device:
+    name: Build WDA (WebDriverAgentRunner) for real iOS arm64
+    runs-on: macos-15
+    steps:
+      - name: Checkout official appium-ios source at pinned commit
+        uses: actions/checkout@v4
+        with:
+          repository: appium/appium-ios
+          ref: 582beec62211b41800a9dd32f8e91cced0228158
+          persist-credentials: false
+
+      - name: Verify checked-out commit matches the pinned official commit
+        run: |
+          set -euo pipefail
+          ACTUAL="$(git rev-parse HEAD)"
+          echo "HEAD=$ACTUAL"
+          if [ "$ACTUAL" != "$WDA_COMMIT" ]; then
+            echo "::error::检出 commit 与锁定 commit 不一致，停止构建"
+            exit 1
+          fi
+          echo "OK: commit 锁定校验通过 ($ACTUAL)"
+
+      - name: Verify package version matches the pinned tag
+        run: |
+          set -euo pipefail
+          VERSION="$(node -p "require('./package.json').version")"
+          echo "appium-webdriveragent version=$VERSION"
+          if [ "$VERSION" != "$WDA_PKG_VERSION" ]; then
+            echo "::error::包版本 $VERSION 与锁定 tag $WDA_TAG 不一致，停止构建"
+            exit 1
+          fi
+          echo "OK: 包版本与 tag 一致 ($VERSION)"
+
+      - name: Select Xcode (matches official CI; do NOT use 26.4+ per official note)
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: "16.4"
+
+      - name: Build WebDriverAgentRunner.app via official script (unsigned, arm64, generic iOS)
+        # 官方 build-real.sh 第 8 行已含 CODE_SIGNING_ALLOWED=NO；此处再显式声明一次作双保险。
+        # 说明：xcodebuild 的命令行设置优先级高于同名环境变量，因此两者一致、不会互相覆盖。
+        run: bash -e Scripts/ci/build-real.sh
+        env:
+          DERIVED_DATA_PATH: appium_wda_ios
+          SCHEME: WebDriverAgentRunner
+          DESTINATION: generic/platform=iOS
+          WD: appium_wda_ios/Build/Products/Debug-iphoneos
+          ZIP_PKG_NAME: "WebDriverAgentRunner-Runner.zip"
+          CODE_SIGNING_ALLOWED: "NO"
+
+      # 官方 build-real.sh 在 $WD 内打完 zip 后 mv 到当前目录（=包目录根 packages/webdriveragent）。
+      # 兜底必须与官方等价且路径全部绝对化：
+      #   WD_ABS 先转绝对路径；TMP_ZIP_DIR 用绝对路径；cd "$WD_ABS" 后 zip 仍写向绝对临时目录；
+      #   最后显式 mv 到 $PKG_DIR/$ZIP_PKG_NAME_IOS；全程不覆盖已存在的正确 ZIP。
+      - name: Ensure ZIP artifact exists (fallback only if official script produced none)
+        run: |
+          set -euo pipefail
+          PKG_DIR="$GITHUB_WORKSPACE/packages/webdriveragent"
+          WD_ABS="$PKG_DIR/$WD"
+          ZIP_ABS="$PKG_DIR/$ZIP_PKG_NAME_IOS"
+          if [ -f "$ZIP_ABS" ]; then
+            echo "ZIP 已在包目录根（官方脚本产物）：$ZIP_ABS"
+          else
+            echo "包目录根没有 ZIP，按官方相同排除规则兜底打包"
+            test -d "$WD_ABS/$SCHEME-Runner.app" || { echo "::error::$SCHEME-Runner.app 不存在"; exit 1; }
+            TMP_ZIP_DIR="$WD_ABS/.wda-zip-out"
+            rm -rf "$TMP_ZIP_DIR"
+            mkdir -p "$TMP_ZIP_DIR"
+            ( cd "$WD_ABS" && zip -r "$TMP_ZIP_DIR/$ZIP_PKG_NAME_IOS" "$SCHEME-Runner.app" -x "$SCHEME-Runner.app/Frameworks/*" )
+            test -f "$TMP_ZIP_DIR/$ZIP_PKG_NAME_IOS" || { echo "::error::兜底打包未生成 ZIP"; exit 1; }
+            if [ -e "$ZIP_ABS" ]; then
+              echo "::error::兜底过程中目标 ZIP 已出现，放弃写入以免覆盖正确产物"
+              rm -rf "$TMP_ZIP_DIR"
+              exit 1
+            fi
+            mv "$TMP_ZIP_DIR/$ZIP_PKG_NAME_IOS" "$ZIP_ABS"
+            rm -rf "$TMP_ZIP_DIR"
+          fi
+          test -f "$ZIP_ABS" || { echo "::error::ZIP 最终缺失：$ZIP_ABS"; exit 1; }
+          echo "最终 ZIP 绝对路径：$ZIP_ABS"
+          ls -l "$ZIP_ABS"
+
+      - name: Verify build product (真机 arm64 / Runner+XCTest / 无模拟器 / 未签名 / ZIP 结构)
+        run: |
+          set -euo pipefail
+          APP="$WD/$SCHEME-Runner.app"
+          BIN="$APP/$SCHEME-Runner"
+          echo "===== 1) .app 存在 ====="
+          test -d "$APP" || { echo "::error::$SCHEME-Runner.app 缺失"; exit 1; }
+          echo "存在：$APP"
+
+          echo "===== 2) 真机 arm64 架构 ====="
+          test -f "$BIN" || { echo "::error::主程序 $SCHEME-Runner 缺失"; exit 1; }
+          echo "Runner 主程序:"; lipo -archs "$BIN"
+          lipo -archs "$BIN" | grep -q arm64 || { echo "::error::Runner 非 arm64"; exit 1; }
+          XCTEST="$(find "$APP/PlugIns" -maxdepth 1 -name '*.xctest' -type d | head -n1)"
+          test -n "$XCTEST" || { echo "::error::缺少 PlugIns/*.xctest (XCTest runner)"; exit 1; }
+          echo "XCTest bundle: $XCTEST"
+          XCTEST_BIN="$XCTEST/$(basename "$XCTEST" .xctest)"
+          echo "XCTest 主程序:"; lipo -archs "$XCTEST_BIN"
+          lipo -archs "$XCTEST_BIN" | grep -q arm64 || { echo "::error::XCTest 非 arm64"; exit 1; }
+
+          echo "===== 3) Runner + XCTest 依赖 ====="
+          find "$XCTEST/Frameworks" -maxdepth 1 -name 'WebDriverAgentLib.framework' -type d \
+            | grep -q . || { echo "::error::缺少 PlugIns/*.xctest/Frameworks/WebDriverAgentLib.framework"; exit 1; }
+          echo "WebDriverAgentLib.framework 就位（位于 .xctest 内）"
+
+          echo "===== 4) 未生成模拟器版本 ====="
+          if find "$DERIVED_DATA_PATH/Build/Products" -maxdepth 1 -type d -name 'Debug-iphonesimulator' | grep -q .; then
+            if find "$DERIVED_DATA_PATH/Build/Products/Debug-iphonesimulator" -maxdepth 1 -name "$SCHEME-Runner.app" | grep -q .; then
+              echo "::error::意外生成了模拟器版本"; exit 1
+            fi
+          fi
+          echo "未出现模拟器产物（符合 generic/platform=iOS）"
+
+          echo "===== 5) 未签名硬性校验（已签名或无法确认 = 工作流失败） ====="
+          set +e
+          SIGN_OUT="$(codesign -dv "$APP" 2>&1)"
+          SIGN_RC=$?
+          XCTEST_SIGN="$(codesign -dv "$XCTEST" 2>&1)"
+          XCTEST_RC=$?
+          set -e
+          echo "codesign -dv 退出码: Runner=$SIGN_RC XCTest=$XCTEST_RC"
+          echo "$SIGN_OUT" | sed 's/^/  /'
+          # a) codesign 成功 = 产物已被签名，违反未签名要求
+          if [ "$SIGN_RC" -eq 0 ]; then
+            echo "::error::Runner 产物已被签名，违反 CODE_SIGNING_ALLOWED=NO 要求，禁止上传"
+            exit 1
+          fi
+          # b) codesign 失败但不是"未签名"，状态无法确认，按不符合要求处理
+          if ! echo "$SIGN_OUT" | grep -qi 'not signed'; then
+            echo "::error::Runner 未签名状态无法确认（退出码 $SIGN_RC 且无 'not signed'），禁止上传"
+            exit 1
+          fi
+          # c) 二次取证：存在 _CodeSignature 目录即视为已被签名
+          if [ -d "$APP/_CodeSignature" ] || [ -d "$XCTEST/_CodeSignature" ]; then
+            echo "::error::检测到 _CodeSignature 目录，产物已被签名，禁止上传"
+            exit 1
+          fi
+          # d) XCTest 同样必须未签名
+          if [ "$XCTEST_RC" -eq 0 ]; then
+            echo "::error::XCTest 产物已被签名，违反 CODE_SIGNING_ALLOWED=NO 要求，禁止上传"
+            exit 1
+          fi
+          if ! echo "$XCTEST_SIGN" | grep -qi 'not signed'; then
+            echo "::error::XCTest 未签名状态无法确认（退出码 $XCTEST_RC），禁止上传"
+            exit 1
+          fi
+          echo "确认：Runner 与 XCTest 均未签名（需在本地用 Sideloadly + 免费 Apple ID 重签）"
+
+          echo "===== 6) ZIP 内含完整 APP 目录结构（与上传路径同一定位） ====="
+          ZIP_ABS="$GITHUB_WORKSPACE/packages/webdriveragent/$ZIP_PKG_NAME_IOS"
+          test -f "$ZIP_ABS" || { echo "::error::ZIP 不在包目录根：$ZIP_ABS"; exit 1; }
+          echo "校验 ZIP 路径：$ZIP_ABS"
+          unzip -l "$ZIP_ABS" | tee zip-listing.txt | sed 's/^/  /'
+          grep -q "$SCHEME-Runner.app/" zip-listing.txt || { echo "::error::ZIP 缺少 APP 目录"; exit 1; }
+          grep -q "PlugIns/.*\.xctest" zip-listing.txt || { echo "::error::ZIP 缺少 XCTest bundle"; exit 1; }
+          echo "ZIP 结构校验通过"
+
+          echo "===== 溯源 ====="
+          echo "commit=$(git rev-parse HEAD)  tag=$WDA_TAG"
+
+      - name: Upload unsigned generic app (本地再用 Sideloadly 签名)
+        uses: actions/upload-artifact@v4
+        with:
+          name: "WebDriverAgentRunner-Runner"
+          path: "packages/webdriveragent/WebDriverAgentRunner-Runner.zip"
+          if-no-files-found: error
