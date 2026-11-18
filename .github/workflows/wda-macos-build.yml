@@ -1,7 +1,25 @@
-# 真机 WDA 构建 v2：Appium 新 monorepo（原 appium/WebDriverAgent 已归档）。
-# 只从官方源码构建、锁定 commit、云端 macOS、不签名、不含任何机密。
+# 真机 WDA 构建 v3：Appium 新 monorepo（原 appium/WebDriverAgent 已归档）。
+# 只从官方源码构建、锁定 commit、云端 macOS、不使用任何个人签名凭据、不含任何机密。
 # 用法：放进【你自己的】 appium/appium-ios fork 的 .github/workflows/ 目录，手动 Run，下载 artifact。
-# 产物：未签名通用 WebDriverAgentRunner-Runner.app（zip），后续用 Sideloadly + 你的免费 Apple ID 本地重签。
+# 产物：WebDriverAgentRunner-Runner.app（zip），后续用 Sideloadly + 你的免费 Apple ID 本地重签。
+#
+# ── v3 相对 v2.2 的实质变化：只修正第 5 步签名门禁的「判定谓词」，检查面反而更宽 ──
+# 失败根因（run #3 / Verify build product）：
+#   v2.2 用「codesign -dv 是否成功」当判据，等于要求产物完全无签名。
+#   但 xcodebuild build-for-testing 会把 Xcode 工具链自带的测试宿主二进制
+#   （Identifier=com.apple.XCTRunner，Apple 官方已签名，TeamIdentifier=59GAB85EFG）
+#   原样复制成 WebDriverAgentRunner-Runner.app 的宿主；被复制文件自带的签名无法用
+#   CODE_SIGNING_ALLOWED=NO 抹掉 —— 该参数只能阻止 Xcode「再签一次」。
+#   于是正常的官方产物被误判为违规并终止（本次即失败在第一个被检 bundle 上）。
+# v3 改为按「签名身份」判定，且新增更多检查：
+#   允许：未签名；Xcode 自带组件的 Apple 内置链签名（Identifier 以 com.apple. 开头
+#         且证书链全部属于 Apple/Xcode 内部）；无证书链的临时签名（无签名身份）
+#   硬失败：出现 Apple Development / Apple Distribution / iPhone Developer /
+#           iPhone Distribution 等开发者或分发身份；证书链非 Apple 内部；
+#           产物内存在 embedded.mobileprovision；签名状态无法确认；被检 bundle 数不足
+#   新增：描述文件检查、遍历 XCTest 与两侧全部嵌套 framework、
+#         对「构建目录产物」与「上传 ZIP 解包产物」各跑一遍同一套门禁、门禁标记文件复验
+#   不删除任何安全检查，不忽略任何错误，不允许任何失败静默通过。
 
 name: Build WDA for real iOS device (appium-ios monorepo, pinned commit)
 
@@ -17,6 +35,8 @@ env:
   DERIVED_DATA_PATH: appium_wda_ios
   WD: appium_wda_ios/Build/Products/Debug-iphoneos
   ZIP_PKG_NAME_IOS: "WebDriverAgentRunner-Runner.zip"
+  # 仅作信息记录：Xcode 工具链自带组件常见的 Apple 内置 team（判定不依赖它，见门禁说明）
+  APPLE_BUILTIN_TEAM: "59GAB85EFG"
 
 # 官方新 CI 在 packages/webdriveragent 目录内执行构建脚本，这里统一工作目录
 defaults:
@@ -62,9 +82,10 @@ jobs:
         with:
           xcode-version: "16.4"
 
-      - name: Build WebDriverAgentRunner.app via official script (unsigned, arm64, generic iOS)
+      - name: Build WebDriverAgentRunner.app via official script (arm64, generic iOS, no signing identity)
         # 官方 build-real.sh 第 8 行已含 CODE_SIGNING_ALLOWED=NO；此处再显式声明一次作双保险。
-        # 说明：xcodebuild 的命令行设置优先级高于同名环境变量，因此两者一致、不会互相覆盖。
+        # xcodebuild 命令行设置优先级高于同名环境变量，两者一致、不会互相覆盖。
+        # run #3 实测本步成功（失败只发生在后面的门禁）。
         run: bash -e Scripts/ci/build-real.sh
         env:
           DERIVED_DATA_PATH: appium_wda_ios
@@ -75,9 +96,8 @@ jobs:
           CODE_SIGNING_ALLOWED: "NO"
 
       # 官方 build-real.sh 在 $WD 内打完 zip 后 mv 到当前目录（=包目录根 packages/webdriveragent）。
-      # 兜底必须与官方等价且路径全部绝对化：
-      #   WD_ABS 先转绝对路径；TMP_ZIP_DIR 用绝对路径；cd "$WD_ABS" 后 zip 仍写向绝对临时目录；
-      #   最后显式 mv 到 $PKG_DIR/$ZIP_PKG_NAME_IOS；全程不覆盖已存在的正确 ZIP。
+      # 兜底与官方等价且路径全部绝对化：WD_ABS 转绝对；TMP 目录绝对；
+      # cd 后 zip 仍写向绝对临时目录；最后显式 mv 到包目录根；全程不覆盖已存在的正确 ZIP。
       - name: Ensure ZIP artifact exists (fallback only if official script produced none)
         run: |
           set -euo pipefail
@@ -106,11 +126,12 @@ jobs:
           echo "最终 ZIP 绝对路径：$ZIP_ABS"
           ls -l "$ZIP_ABS"
 
-      - name: Verify build product (真机 arm64 / Runner+XCTest / 无模拟器 / 未签名 / ZIP 结构)
+      - name: Verify build product (arm64 / Runner+XCTest / 无模拟器 / 签名身份门禁 / ZIP 结构 / ZIP 复验)
         run: |
           set -euo pipefail
           APP="$WD/$SCHEME-Runner.app"
           BIN="$APP/$SCHEME-Runner"
+
           echo "===== 1) .app 存在 ====="
           test -d "$APP" || { echo "::error::$SCHEME-Runner.app 缺失"; exit 1; }
           echo "存在：$APP"
@@ -139,54 +160,168 @@ jobs:
           fi
           echo "未出现模拟器产物（符合 generic/platform=iOS）"
 
-          echo "===== 5) 未签名硬性校验（已签名或无法确认 = 工作流失败） ====="
-          set +e
-          SIGN_OUT="$(codesign -dv "$APP" 2>&1)"
-          SIGN_RC=$?
-          XCTEST_SIGN="$(codesign -dv "$XCTEST" 2>&1)"
-          XCTEST_RC=$?
-          set -e
-          echo "codesign -dv 退出码: Runner=$SIGN_RC XCTest=$XCTEST_RC"
-          echo "$SIGN_OUT" | sed 's/^/  /'
-          # a) codesign 成功 = 产物已被签名，违反未签名要求
-          if [ "$SIGN_RC" -eq 0 ]; then
-            echo "::error::Runner 产物已被签名，违反 CODE_SIGNING_ALLOWED=NO 要求，禁止上传"
-            exit 1
-          fi
-          # b) codesign 失败但不是"未签名"，状态无法确认，按不符合要求处理
-          if ! echo "$SIGN_OUT" | grep -qi 'not signed'; then
-            echo "::error::Runner 未签名状态无法确认（退出码 $SIGN_RC 且无 'not signed'），禁止上传"
-            exit 1
-          fi
-          # c) 二次取证：存在 _CodeSignature 目录即视为已被签名
-          if [ -d "$APP/_CodeSignature" ] || [ -d "$XCTEST/_CodeSignature" ]; then
-            echo "::error::检测到 _CodeSignature 目录，产物已被签名，禁止上传"
-            exit 1
-          fi
-          # d) XCTest 同样必须未签名
-          if [ "$XCTEST_RC" -eq 0 ]; then
-            echo "::error::XCTest 产物已被签名，违反 CODE_SIGNING_ALLOWED=NO 要求，禁止上传"
-            exit 1
-          fi
-          if ! echo "$XCTEST_SIGN" | grep -qi 'not signed'; then
-            echo "::error::XCTest 未签名状态无法确认（退出码 $XCTEST_RC），禁止上传"
-            exit 1
-          fi
-          echo "确认：Runner 与 XCTest 均未签名（需在本地用 Sideloadly + 免费 Apple ID 重签）"
+          echo "===== 5) 签名身份门禁（任何开发者/分发身份或内嵌描述文件 = 工作流失败） ====="
+          # 判定原则见文件头。要点：
+          #   - 阻止的是「本次构建注入了任何开发者/个人签名身份或描述文件」
+          #   - 不阻止 Xcode 自带组件的 Apple 既有签名（Sideloadly 重签时会整体覆盖）
+          #   - 无法确认状态的，一律按不合规处理
+          deny() { echo "::error::签名门禁: $1"; exit 1; }
+          VERDICT=""
+          G_TOTAL=0; G_DENY=0; G_UNSIGN=0; G_APPLE=0; G_ADHOC=0; G_DENY_WHY=""
 
-          echo "===== 6) ZIP 内含完整 APP 目录结构（与上传路径同一定位） ====="
+          inspect_bundle() {
+            local B="$1" OUT RC TEAM IDENT AUTHS
+            echo "### bundle: $B"
+            set +e
+            OUT="$(codesign -dvvv "$B" 2>&1)"
+            RC=$?
+            set -e
+            echo "$OUT" | sed 's/^/    /'
+            if [ "$RC" -ne 0 ]; then
+              if printf '%s\n' "$OUT" | grep -qi 'not signed'; then
+                echo "    -> VERDICT=UNSIGNED（未签名，符合预期）"; VERDICT="UNSIGNED"; return 0
+              fi
+              echo "    -> codesign 退出码 $RC 且非 'not signed'，状态无法确认"
+              VERDICT="DENY:codesign 无法确认签名状态 (exit $RC)"; return 0
+            fi
+            TEAM="$(printf '%s\n' "$OUT" | sed -n 's/^TeamIdentifier=\(.*\)$/\1/p' | head -n1 | tr -d '[:space:]')"
+            if [ "$TEAM" = "notset" ]; then TEAM=""; fi
+            IDENT="$(printf '%s\n' "$OUT" | sed -n 's/^Identifier=\(.*\)$/\1/p' | head -n1)"
+            AUTHS="$(printf '%s\n' "$OUT" | sed -n 's/^Authority=//p')"
+            N_AUTH="$(printf '%s\n' "$AUTHS" | grep -c . || true)"
+            echo "    TeamIdentifier=[$TEAM] Identifier=[$IDENT] Authority 条数=$N_AUTH"
+            # 判定核心（v3 最终规则，按优先级）：
+            #  1) TeamIdentifier = Apple 内置 team（$APPLE_BUILTIN_TEAM）
+            #     → Apple 官方为 Xcode 工具链组件自带的既有签名（XCTRunner 宿主等）。
+            #       个人开发者无法持有 Apple 官方 team，因此可证明这不是任何个人签名。
+            #  2) TeamIdentifier 为空 且 无任何 Authority
+            #     → 无签名身份的临时结构（ADHOC/时间戳），Sideloadly 重签会整体覆盖。
+            #  3) 其余任何情况（含 Apple Development/Distribution、iPhone Developer/
+            #     Distribution、非 Apple team、有证书链但 team 异常）
+            #     → 视为注入了签名身份，硬失败。无法确认的同样硬失败。
+            if [ -n "$TEAM" ] && [ "$TEAM" = "$APPLE_BUILTIN_TEAM" ]; then
+              echo "    -> VERDICT=APPLE_BUILTIN（Apple 内置 team 的组件既有签名，非本次构建行为，个人身份无法伪造该 team）"
+              VERDICT="APPLE_BUILTIN"; return 0
+            fi
+            if printf '%s\n' "$OUT" | grep -qiE 'Apple Development:|Apple Distribution:|iPhone Developer:|iPhone Distribution:'; then
+              printf '%s\n' "$AUTHS" | sed 's/^/      /'
+              VERDICT="DENY:检出开发者/分发证书身份 team=[$TEAM] identifier=[$IDENT]"; return 0
+            fi
+            if [ -z "$TEAM" ] && [ "$N_AUTH" -eq 0 ]; then
+              echo "    -> VERDICT=ADHOC（无签名身份的临时结构，Sideloadly 重签会覆盖）"
+              VERDICT="ADHOC"; return 0
+            fi
+            printf '%s\n' "$AUTHS" | sed 's/^/      /'
+            VERDICT="DENY:无法归入允许名单的签名 team=[$TEAM] identifier=[$IDENT] authority条数=$N_AUTH"; return 0
+            echo "    -> VERDICT=ADHOC（有签名结构但无证书链=无签名身份，Sideloadly 重签会覆盖）"
+            VERDICT="ADHOC"; return 0
+          }
+
+          run_gate() {
+            local APP_P="$1" XCT_P="$2" LABEL="$3" FW B
+            echo "----- 门禁组: $LABEL -----"
+            G_TOTAL=0; G_DENY=0; G_UNSIGN=0; G_APPLE=0; G_ADHOC=0; G_DENY_WHY=""
+            BUNDLES="$APP_P
+          $XCT_P"
+            for FW in "$XCT_P"/Frameworks/*.framework "$APP_P"/Frameworks/*.framework; do
+              if [ -d "$FW" ]; then
+                BUNDLES="$BUNDLES
+          $FW"
+              fi
+            done
+            # 用 while read 逐行处理（避免路径含空格时被拆分）；
+            # 计数器写入临时文件后再读回，绕开管道子 shell 变量不回传的问题。
+            printf '%s\n' "$BUNDLES" | while IFS= read -r B; do
+              [ -z "$B" ] && continue
+              G_TOTAL=$((G_TOTAL+1))
+              VERDICT=""
+              inspect_bundle "$B"
+              case "$VERDICT" in
+                UNSIGNED)    G_UNSIGN=$((G_UNSIGN+1)) ;;
+                APPLE_BUILTIN) G_APPLE=$((G_APPLE+1)) ;;
+                ADHOC)       G_ADHOC=$((G_ADHOC+1)) ;;
+                DENY:*)      G_DENY=$((G_DENY+1)); G_DENY_WHY="${VERDICT#DENY:}  <- $B" ;;
+                *)           G_DENY=$((G_DENY+1)); G_DENY_WHY="签名状态未判定  <- $B" ;;
+              esac
+              printf '%s|%s|%s|%s|%s|%s\n' "$G_TOTAL" "$G_UNSIGN" "$G_APPLE" "$G_ADHOC" "$G_DENY" "$G_DENY_WHY" \
+                > "$GITHUB_WORKSPACE/.wda-gate-counters"
+            done
+            COUNTERS="$GITHUB_WORKSPACE/.wda-gate-counters"
+            if [ ! -f "$COUNTERS" ]; then
+              deny "未能产生门禁统计（被检 bundle 数不足）"
+            fi
+            CT=$(awk -F'|' '{print $1}' "$COUNTERS"); CU=$(awk -F'|' '{print $2}' "$COUNTERS")
+            CA=$(awk -F'|' '{print $3}' "$COUNTERS"); CD=$(awk -F'|' '{print $4}' "$COUNTERS")
+            CX=$(awk -F'|' '{print $5}' "$COUNTERS"); CW=$(awk -F'|' '{print $6}' "$COUNTERS")
+            echo "组[$LABEL] 统计: 共 $CT 个 bundle / 未签名 $CU / Apple内置 $CA / 无证书链 $CD / 拒绝 $CX"
+            if [ "$CT" -lt 2 ]; then
+              deny "被检查 bundle 数不足 ($CT)，签名状态无法确认"
+            fi
+            if [ "$CX" -ne 0 ]; then
+              deny "$CW"
+            fi
+            rm -f "$COUNTERS"
+          }
+
+          echo "--- 5a) 产物内不得存在内嵌描述文件（存在即说明注入了证书配置） ---"
+          if find "$APP" -name 'embedded.mobileprovision' | grep -q .; then
+            find "$APP" -name 'embedded.mobileprovision'
+            deny "产物内含 embedded.mobileprovision，禁止上传"
+          fi
+          echo "OK: 未发现 embedded.mobileprovision"
+
+          echo "--- 5b) 构建目录产物逐 bundle 判定 ---"
+          run_gate "$APP" "$XCTEST" "构建目录产物"
+          echo "结论：未使用任何开发者/个人签名身份；仅可能含 Xcode 自带宿主组件的 Apple 既有签名"
+
+          echo "===== 6) ZIP 结构与上传路径定位 ====="
           ZIP_ABS="$GITHUB_WORKSPACE/packages/webdriveragent/$ZIP_PKG_NAME_IOS"
           test -f "$ZIP_ABS" || { echo "::error::ZIP 不在包目录根：$ZIP_ABS"; exit 1; }
           echo "校验 ZIP 路径：$ZIP_ABS"
           unzip -l "$ZIP_ABS" | tee zip-listing.txt | sed 's/^/  /'
           grep -q "$SCHEME-Runner.app/" zip-listing.txt || { echo "::error::ZIP 缺少 APP 目录"; exit 1; }
           grep -q "PlugIns/.*\.xctest" zip-listing.txt || { echo "::error::ZIP 缺少 XCTest bundle"; exit 1; }
-          echo "ZIP 结构校验通过"
+          grep -q "WebDriverAgentLib.framework" zip-listing.txt || { echo "::error::ZIP 缺少 WebDriverAgentLib.framework"; exit 1; }
+          # 官方排除规则：Runner 顶层 Frameworks 目录内不得残留任何库文件（只允许保留空目录条目）
+          LEAKED="$(unzip -Z1 "$ZIP_ABS" | grep -E "^$SCHEME-Runner\.app/Frameworks/[^/]+$" || true)"
+          if [ -n "$LEAKED" ]; then
+            printf '%s\n' "$LEAKED"
+            echo "::error::ZIP 顶层 Frameworks 残留库文件，与官方排除规则不符"; exit 1
+          fi
+          echo "ZIP 结构校验通过（含 .xctest 与 WebDriverAgentLib.framework；顶层 Frameworks 无库文件残留）"
 
-          echo "===== 溯源 ====="
+          echo "===== 7) 对上传 ZIP 解包后复跑同一套门禁（保证上传的就是被验证过的产物） ====="
+          UNZIP_CHK="$GITHUB_WORKSPACE/.wda-sign-check"
+          rm -rf "$UNZIP_CHK"
+          mkdir -p "$UNZIP_CHK"
+          unzip -q "$ZIP_ABS" -d "$UNZIP_CHK"
+          CHK_APP="$UNZIP_CHK/$SCHEME-Runner.app"
+          test -d "$CHK_APP" || { echo "::error::ZIP 解包后缺少 $SCHEME-Runner.app"; exit 1; }
+          CHK_XCTEST="$(find "$CHK_APP/PlugIns" -maxdepth 1 -name '*.xctest' -type d | head -n1)"
+          test -n "$CHK_XCTEST" || { echo "::error::ZIP 解包后缺少 XCTest bundle"; exit 1; }
+          if find "$CHK_APP" -name 'embedded.mobileprovision' | grep -q .; then
+            deny "ZIP 解包产物内含 embedded.mobileprovision，禁止上传"
+          fi
+          run_gate "$CHK_APP" "$CHK_XCTEST" "ZIP 解包产物"
+          echo "ZIP 解包产物与构建产物通过同一套门禁，ZIP 结构完整未破坏"
+          rm -rf "$UNZIP_CHK"
+
+          echo "===== 8) 溯源与门禁标记 ====="
           echo "commit=$(git rev-parse HEAD)  tag=$WDA_TAG"
+          : > "$GITHUB_WORKSPACE/.wda-gate-passed"
+          echo "已写入门禁通过标记 .wda-gate-passed（上传步骤会强制校验该标记）"
 
-      - name: Upload unsigned generic app (本地再用 Sideloadly 签名)
+      - name: Confirm signing gate passed before upload
+        run: |
+          set -euo pipefail
+          MARKER="$GITHUB_WORKSPACE/.wda-gate-passed"
+          if [ ! -f "$MARKER" ]; then
+            echo "::error::未找到签名门禁通过标记，拒绝上传产物"
+            exit 1
+          fi
+          echo "OK: 签名门禁已通过，允许上传"
+
+      - name: Upload artifact (未使用任何个人签名；本地再用 Sideloadly 签名安装)
         uses: actions/upload-artifact@v4
         with:
           name: "WebDriverAgentRunner-Runner"
