@@ -3,6 +3,52 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 4.0.0 (2026-11-18)
+
+### ⚠ BREAKING CHANGES
+
+* **tuntap:** the package requires the Appium 4 versions of the @appium/* dependencies and Node.js 22.22.2+, 24.15.0+ or 26+.
+
+### Features
+
+* move appium-ios-tuntap into the monorepo as packages/tuntap ([#14](https://github.com/appium/appium-ios/issues/14)) ([92421e1](https://github.com/appium/appium-ios/commit/92421e10b385fb1b3f05cfa7601954734e8b0196))
+* move appium/coresim into the monorepo as packages/coresim ([#16](https://github.com/appium/appium-ios/issues/16)) ([a1acd55](https://github.com/appium/appium-ios/commit/a1acd556f716595d120bc2bf92b317ad84cbfad4))
+* **tuntap:** add Appium 4 support ([02e0193](https://github.com/appium/appium-ios/commit/02e019329862cefafbf85886a5f8841377464d7f))
+* **tuntap:** read interface stats natively on macOS, Linux, and Windows ([#127](https://github.com/appium/appium-ios/issues/127)) ([71352df](https://github.com/appium/appium-ios/commit/71352df930ddf4016fd41fc4832bf1b88480393a))
+
+### Bug Fixes
+
+* classify TunTap.open() errors by errno code instead of message text ([#34](https://github.com/appium/appium-ios/issues/34)) ([2663782](https://github.com/appium/appium-ios/commit/266378211eaf7629d8e154fa3f35eb5a41e77eb5))
+* keep TunTapPermissionError from TunTap.removeRoute() ([#32](https://github.com/appium/appium-ios/issues/32)) ([5c99572](https://github.com/appium/appium-ios/commit/5c995726b414fbb527801d5a9b3e3da5b6a7fd9c))
+* report &quot;Device has been closed&quot; after TunTap.close() ([#29](https://github.com/appium/appium-ios/issues/29)) ([9e2f8c8](https://github.com/appium/appium-ios/commit/9e2f8c811e2298dc27366f4a8d6d555185a3f5d6))
+* **tuntap:** pin device certificate in the native lockdown tunnel ([#183](https://github.com/appium/appium-ios/issues/183)) ([b2a34fb](https://github.com/appium/appium-ios/commit/b2a34fb9501d2177bb25bf1ffc80276353e98393))
+
+### Code Refactoring
+
+* share one socket poll loop between TLS connect and forwarder ([#36](https://github.com/appium/appium-ios/issues/36)) ([9df4615](https://github.com/appium/appium-ios/commit/9df46155a357b5865f6f5e5fc1fd5406acd8ad7c))
+
+### Miscellaneous Chores
+
+* **deps:** bump @appium/* packages to latest 4.0 betas ([#193](https://github.com/appium/appium-ios/issues/193)) ([de20629](https://github.com/appium/appium-ios/commit/de20629ed0e7b9ec22953f25ba30825541be3ca4))
+* ensure Dependabot preserves version ranges ([#24](https://github.com/appium/appium-ios/issues/24)) ([95e4e1a](https://github.com/appium/appium-ios/commit/95e4e1a4703f8ca833f01ecf2af75f4696d98043))
+* publish ([4cfb9d3](https://github.com/appium/appium-ios/commit/4cfb9d330d927b5867e145cc5b64fcd880a9ce55))
+* publish ([e2e9013](https://github.com/appium/appium-ios/commit/e2e901314b4e3db624cf8adf86619cb5ee4d9a7b))
+* publish ([dbf47fc](https://github.com/appium/appium-ios/commit/dbf47fcc59bfd8b70b6b8b2c15b2e099d3530fd0))
+* publish ([e96b6d6](https://github.com/appium/appium-ios/commit/e96b6d6bfaf011872e721578e63576c79ee7de8a))
+* publish ([3b5525f](https://github.com/appium/appium-ios/commit/3b5525fcefd5b08c57cf571560ab57e9b59aaf36))
+* publish ([9c72898](https://github.com/appium/appium-ios/commit/9c72898744045b9ac9f691af75f50976c59eb208))
+* publish ([5e2dce6](https://github.com/appium/appium-ios/commit/5e2dce6a74f93f49d0dc80e07bf2685f89b8b89d))
+* publish ([f674d85](https://github.com/appium/appium-ios/commit/f674d8563c83ddaf61921464dfa6cc4618ef8e5e))
+* publish ([bd9ba5f](https://github.com/appium/appium-ios/commit/bd9ba5fd86b87035b15023ae46d3bcec928266b5))
+* publish ([859be1d](https://github.com/appium/appium-ios/commit/859be1d7288d86b5b276e621c10dc43ac34b65c0))
+* publish ([1a2b707](https://github.com/appium/appium-ios/commit/1a2b707d67be5de584d65ab3d540504eec1de0cc))
+* publish ([da9df50](https://github.com/appium/appium-ios/commit/da9df509454bca268192150e4d3302d7f000a5c9))
+* publish ([f63d306](https://github.com/appium/appium-ios/commit/f63d30608de059eb3cf932800fd95e45a1b16b1c))
+* publish ([ea08521](https://github.com/appium/appium-ios/commit/ea08521b1a06e086e979b53002884710a027a12d))
+* publish ([3cc0873](https://github.com/appium/appium-ios/commit/3cc0873527ff977088d7a974e71590b31adbf6fd))
+* **tuntap:** fix lint warnings ([#197](https://github.com/appium/appium-ios/issues/197)) ([fbd1119](https://github.com/appium/appium-ios/commit/fbd1119ca9e8683255b2c1d603c39b3b4603d69d))
+
+
 ## [3.1.0](https://github.com/appium/appium-ios/compare/appium-ios-tuntap@3.0.4...appium-ios-tuntap@3.1.0) (2026-11-16)
 
 ### Features

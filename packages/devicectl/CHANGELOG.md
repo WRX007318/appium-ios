@@ -3,6 +3,35 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 4.0.0 (2026-11-18)
+
+### ⚠ BREAKING CHANGES
+
+* **devicectl:** the package requires the Appium 4 versions of the @appium/* dependencies and Node.js 22.22.2+, 24.15.0+ or 26+.
+
+### Features
+
+* **devicectl:** add Appium 4 support ([453f8f2](https://github.com/appium/appium-ios/commit/453f8f2df7b16577def3d6bf4d96a213b815e0f3))
+* move node-devicectl into the monorepo as packages/devicectl ([#21](https://github.com/appium/appium-ios/issues/21)) ([bf39cfd](https://github.com/appium/appium-ios/commit/bf39cfd033b90a153d2c014bed1712161b413235))
+
+### Bug Fixes
+
+* **devicectl:** decode percent-encoded app urls before filtering processes ([#47](https://github.com/appium/appium-ios/issues/47)) ([8b67a58](https://github.com/appium/appium-ios/commit/8b67a58088d8ced5cb7fd8445b3ea7358c06cf0a))
+* **remote-debugger:** connect real-device clients after listeners are attached and release lost services ([#123](https://github.com/appium/appium-ios/issues/123)) ([c2ffd94](https://github.com/appium/appium-ios/commit/c2ffd94ca4c8d2c1952da80a816f9d8ed3188521))
+
+### Miscellaneous Chores
+
+* **deps:** bump @appium/* packages to latest 4.0 betas ([#193](https://github.com/appium/appium-ios/issues/193)) ([de20629](https://github.com/appium/appium-ios/commit/de20629ed0e7b9ec22953f25ba30825541be3ca4))
+* publish ([3591f6f](https://github.com/appium/appium-ios/commit/3591f6f311f1770c809df29615a997158bb4fcdd))
+* publish ([dbf47fc](https://github.com/appium/appium-ios/commit/dbf47fcc59bfd8b70b6b8b2c15b2e099d3530fd0))
+* publish ([3b5525f](https://github.com/appium/appium-ios/commit/3b5525fcefd5b08c57cf571560ab57e9b59aaf36))
+* publish ([9c72898](https://github.com/appium/appium-ios/commit/9c72898744045b9ac9f691af75f50976c59eb208))
+* publish ([cc6e2e4](https://github.com/appium/appium-ios/commit/cc6e2e479f2fd3b198e170ff3d0caa754f418edb))
+* publish ([94702b4](https://github.com/appium/appium-ios/commit/94702b439588a5d52b98dc3138646494c6aae136))
+* publish ([64177b9](https://github.com/appium/appium-ios/commit/64177b9c3543a597629d8310920e515542858ae8))
+* **xcode:** update dependency teen_process to v5 ([#195](https://github.com/appium/appium-ios/issues/195)) ([35aa451](https://github.com/appium/appium-ios/commit/35aa45124a7ced8a0bf6e7cb8ba7358a816adc20))
+
+
 ## [3.0.3](https://github.com/appium/appium-ios/compare/node-devicectl@3.0.2...node-devicectl@3.0.3) (2026-11-13)
 
 ### Miscellaneous Chores

@@ -3,6 +3,103 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 7.0.0 (2026-11-18)
+
+### ⚠ BREAKING CHANGES
+
+* **remotexpc:** the package requires the Appium 4 versions of the @appium/* dependencies and Node.js 22.22.2+, 24.15.0+ or 26+.
+
+### Features
+
+* add CoreDevice file service for listing, pulling and pushing files ([#52](https://github.com/appium/appium-ios/issues/52)) ([f7b6b64](https://github.com/appium/appium-ios/commit/f7b6b64a6b3551ce6d179abffcc4151ba5914cdb))
+* move appium-ios-remotexpc into the monorepo as packages/remotexpc ([#22](https://github.com/appium/appium-ios/issues/22)) ([e448236](https://github.com/appium/appium-ios/commit/e4482360b4e1712d3522b28d3c4f0b4d7b576ca7))
+* **remotexpc:** add Appium 4 support ([7bb7cda](https://github.com/appium/appium-ios/commit/7bb7cdaf0f902b91e0b5181fe9b505fe479372e8))
+* **remotexpc:** add WebInspectorService.connect() ([#117](https://github.com/appium/appium-ios/issues/117)) ([605ef59](https://github.com/appium/appium-ios/commit/605ef5972b0e7126e833cd9f8985a5e2d46a20c2))
+* **remotexpc:** match Apple TV adverts to pair records by authTag ([#50](https://github.com/appium/appium-ios/issues/50)) ([81f6930](https://github.com/appium/appium-ios/commit/81f69306a1736ffa430cec9b778a2de88e8e44e8))
+* **remotexpc:** request keyframes from the device in ScreenStreamCapture ([#213](https://github.com/appium/appium-ios/issues/213)) ([4a51652](https://github.com/appium/appium-ios/commit/4a516527fddf9f3e9b19ac736c452e177251fdc1))
+* **remotexpc:** start lockdown services over usbmux when no tunnel is available ([#113](https://github.com/appium/appium-ios/issues/113)) ([bbd0bf7](https://github.com/appium/appium-ios/commit/bbd0bf7d65ee3e2d42b39eca46c7991ac87f4c69))
+
+### Bug Fixes
+
+* add missing devicectl project reference in remotexpc tsconfig ([#30](https://github.com/appium/appium-ios/issues/30)) ([e4f65ea](https://github.com/appium/appium-ios/commit/e4f65eaa2de0201b2a1643eedf2df94fc231591c))
+* **remotexpc:** detach plist layer from DVT and testmanagerd DTX sockets ([#67](https://github.com/appium/appium-ios/issues/67)) ([a13cdad](https://github.com/appium/appium-ios/commit/a13cdad333a6acc47735a8ebe6ef607e41394130))
+* **remotexpc:** detach tunnel lockdown handshake connection, close it on failure ([#74](https://github.com/appium/appium-ios/issues/74)) ([7977d77](https://github.com/appium/appium-ios/commit/7977d779ba9cfdeec2947d75c048a5f93185ec4e))
+* **remotexpc:** don&#x27;t crash on a transport error nobody listens to ([#215](https://github.com/appium/appium-ios/issues/215)) ([1913083](https://github.com/appium/appium-ios/commit/1913083afa89e3730deca98b241a03fdbc25a8a1))
+* **remotexpc:** don&#x27;t fail silent XCTest runs after 60s, clear runner timeout timer ([#124](https://github.com/appium/appium-ios/issues/124)) ([afda8c9](https://github.com/appium/appium-ios/commit/afda8c9d96e6012b0453b5d3e43c2eef57d015ee))
+* **remotexpc:** honor TCP socket options on all platforms and destroy socket on timeout/error ([#116](https://github.com/appium/appium-ios/issues/116)) ([30121af](https://github.com/appium/appium-ios/commit/30121af4b7b7dd2ad465f801c0c48b27c1577d06))
+* **remotexpc:** keep binary plist UIDs apart from integers in NSKeyedArchiver decoding ([#105](https://github.com/appium/appium-ios/issues/105)) ([f04fd44](https://github.com/appium/appium-ios/commit/f04fd44664025f548f62f36f19f6b9865569896b))
+* **remotexpc:** keep idle AFC connections open past 30s ([#137](https://github.com/appium/appium-ios/issues/137)) ([ef536de](https://github.com/appium/appium-ios/commit/ef536de3072e73c467fe47be4ab208f488d7994f))
+* **remotexpc:** make NetworkMonitor.start() idempotent ([#135](https://github.com/appium/appium-ios/issues/135)) ([cda68e3](https://github.com/appium/appium-ios/commit/cda68e391f96c45f8e679528328904fba19a1c5c))
+* **remotexpc:** opack2 15-element array and null terminator collision ([#95](https://github.com/appium/appium-ios/issues/95)) ([4a5abfb](https://github.com/appium/appium-ios/commit/4a5abfbcd33ed29e4a5edd7375f71462f1d45868))
+* **remotexpc:** parse binary plist dicts that have a &quot;type&quot; key ([#64](https://github.com/appium/appium-ios/issues/64)) ([e8ac890](https://github.com/appium/appium-ios/commit/e8ac890fe68a5c22161e2a9b10de15f124d80068))
+* **remotexpc:** pin device certificate in lockdown TLS and fail closed ([#182](https://github.com/appium/appium-ios/issues/182)) ([e85c1a7](https://github.com/appium/appium-ios/commit/e85c1a7e77ab3b144e641f5e9ee50ebacb0ca911))
+* **remotexpc:** send misagent, mobile config and springboard requests once ([#75](https://github.com/appium/appium-ios/issues/75)) ([c706fda](https://github.com/appium/appium-ios/commit/c706fda27cfe303310a001399bf30e0cf19fb2fa))
+* **remotexpc:** syslog StartActivity reply, early text lines and socket leaks ([#121](https://github.com/appium/appium-ios/issues/121)) ([4a6202e](https://github.com/appium/appium-ios/commit/4a6202e6a6cc0d87f7ae56d6f8cdc6bd265a5b46))
+* **remotexpc:** validate binary plist trailer and lengths against the buffer ([#141](https://github.com/appium/appium-ios/issues/141)) ([b0295c3](https://github.com/appium/appium-ios/commit/b0295c3d4081d120c45c87b3d341cc8955d56e00))
+* **remotexpc:** wait for EnergyMonitor start/stop replies, run DVT integration suites serially ([#106](https://github.com/appium/appium-ios/issues/106)) ([d07637d](https://github.com/appium/appium-ios/commit/d07637d9dad27008e78131fdc8ecd02adfbf38e8))
+* **tuntap:** pin device certificate in the native lockdown tunnel ([#183](https://github.com/appium/appium-ios/issues/183)) ([b2a34fb](https://github.com/appium/appium-ios/commit/b2a34fb9501d2177bb25bf1ffc80276353e98393))
+
+### Code Refactoring
+
+* **remotexpc:** use getFreePort from @appium/support for the registry port ([#205](https://github.com/appium/appium-ios/issues/205)) ([f739ffb](https://github.com/appium/appium-ios/commit/f739ffb51b4b1ea58944240d197d53a970e05eef))
+* use ConditionUnmetError instead of message matching ([#169](https://github.com/appium/appium-ios/issues/169)) ([ccaac20](https://github.com/appium/appium-ios/commit/ccaac207cd2e449a821f75dd0881ffc3dfc595e2))
+
+### Miscellaneous Chores
+
+* **deps:** bump @appium/* packages to latest 4.0 betas ([#193](https://github.com/appium/appium-ios/issues/193)) ([de20629](https://github.com/appium/appium-ios/commit/de20629ed0e7b9ec22953f25ba30825541be3ca4))
+* **deps:** Bump axios from 1.18.1 to 1.21.0 ([#130](https://github.com/appium/appium-ios/issues/130)) ([566da80](https://github.com/appium/appium-ios/commit/566da80f6b43711cdc1bc6d4ca2b85937e9b30e4))
+* drop rimraf dependency in favor of node:fs ([#192](https://github.com/appium/appium-ios/issues/192)) ([7416dbf](https://github.com/appium/appium-ios/commit/7416dbff1108df8bf8e1e8b5192d05302efa0db8))
+* ensure Dependabot preserves version ranges ([#24](https://github.com/appium/appium-ios/issues/24)) ([95e4e1a](https://github.com/appium/appium-ios/commit/95e4e1a4703f8ca833f01ecf2af75f4696d98043))
+* publish ([4e29c4b](https://github.com/appium/appium-ios/commit/4e29c4b699a8d5fa32cb37ecbf716b52eedbd636))
+* publish ([4cfb9d3](https://github.com/appium/appium-ios/commit/4cfb9d330d927b5867e145cc5b64fcd880a9ce55))
+* publish ([a6c7855](https://github.com/appium/appium-ios/commit/a6c7855edfddd52cd6903fb592c1957de0ea1711))
+* publish ([c9a900f](https://github.com/appium/appium-ios/commit/c9a900f57f781424c0fbfa1aa85ee11ab0171a44))
+* publish ([d3d5b4d](https://github.com/appium/appium-ios/commit/d3d5b4d61cfc16788a9591090cde6e91fa0309bd))
+* publish ([3942249](https://github.com/appium/appium-ios/commit/3942249aea8e63ffabc7377e094f543b7eb8ede3))
+* publish ([3591f6f](https://github.com/appium/appium-ios/commit/3591f6f311f1770c809df29615a997158bb4fcdd))
+* publish ([e2e9013](https://github.com/appium/appium-ios/commit/e2e901314b4e3db624cf8adf86619cb5ee4d9a7b))
+* publish ([dbf47fc](https://github.com/appium/appium-ios/commit/dbf47fcc59bfd8b70b6b8b2c15b2e099d3530fd0))
+* publish ([fa606e8](https://github.com/appium/appium-ios/commit/fa606e89f7d0cbf09a3b0f388aa62c043e8cbd90))
+* publish ([b082a66](https://github.com/appium/appium-ios/commit/b082a6691222870eb9b790feb1e45f03629ce3f2))
+* publish ([e96b6d6](https://github.com/appium/appium-ios/commit/e96b6d6bfaf011872e721578e63576c79ee7de8a))
+* publish ([3b5525f](https://github.com/appium/appium-ios/commit/3b5525fcefd5b08c57cf571560ab57e9b59aaf36))
+* publish ([9c72898](https://github.com/appium/appium-ios/commit/9c72898744045b9ac9f691af75f50976c59eb208))
+* publish ([5e2dce6](https://github.com/appium/appium-ios/commit/5e2dce6a74f93f49d0dc80e07bf2685f89b8b89d))
+* publish ([efad756](https://github.com/appium/appium-ios/commit/efad756d909958468cc0ed3575ef4a78b74bcbf9))
+* publish ([f60fb63](https://github.com/appium/appium-ios/commit/f60fb63efa11fc88a94f50bfc1a809688fda0eb6))
+* publish ([7e550f9](https://github.com/appium/appium-ios/commit/7e550f909046379f45dae6b118088b8da3de59e8))
+* publish ([18b05a6](https://github.com/appium/appium-ios/commit/18b05a60f0fe93d2052059bda4ded1981679e002))
+* publish ([b9f4071](https://github.com/appium/appium-ios/commit/b9f4071ac35d87cf67e2d757d80f0d026e51f05e))
+* publish ([c00c18e](https://github.com/appium/appium-ios/commit/c00c18e3e6b9d15069e97b1670065549bef07488))
+* publish ([903218f](https://github.com/appium/appium-ios/commit/903218f717568ff85ac36dca4d6380888fa02bf6))
+* publish ([cc6e2e4](https://github.com/appium/appium-ios/commit/cc6e2e479f2fd3b198e170ff3d0caa754f418edb))
+* publish ([d3a8beb](https://github.com/appium/appium-ios/commit/d3a8beb2f972f55a5e30da5fbf6bc1b7d841b06b))
+* publish ([fe4df3f](https://github.com/appium/appium-ios/commit/fe4df3fb254c35747ce430b517adf6739abb93bd))
+* publish ([7b95bf0](https://github.com/appium/appium-ios/commit/7b95bf0c9853ff8563c7dbf16fd52249f3f0d374))
+* publish ([81fb72d](https://github.com/appium/appium-ios/commit/81fb72dc3b3f23f23c804f1969f0c1eb19c8a7a2))
+* publish ([9b73259](https://github.com/appium/appium-ios/commit/9b73259e1eadc6a2c9448781eaee736b06309865))
+* publish ([822b768](https://github.com/appium/appium-ios/commit/822b7684ac61b6611e677f3ba8037412397a172e))
+* publish ([5aee653](https://github.com/appium/appium-ios/commit/5aee653f4d140155a8cb833d41ad2becf2dc37b6))
+* publish ([44cbb3b](https://github.com/appium/appium-ios/commit/44cbb3bb77ce31b243a70551691e864bb933a2b5))
+* publish ([22efc2e](https://github.com/appium/appium-ios/commit/22efc2e6067b3afeee8dba5d44701962ab175bd3))
+* publish ([8f852e1](https://github.com/appium/appium-ios/commit/8f852e11e981f0f7e8228e34611fa6f7af9381cc))
+* publish ([a21f31d](https://github.com/appium/appium-ios/commit/a21f31d7719cb7ed704681f07d3a266d5dd47c00))
+* publish ([337ec82](https://github.com/appium/appium-ios/commit/337ec82a7ef4dcc6d826b2b1242e2eb4bcd22953))
+* publish ([0cfd61a](https://github.com/appium/appium-ios/commit/0cfd61aab2961eb3d82eef771b834948e5e61774))
+* publish ([94702b4](https://github.com/appium/appium-ios/commit/94702b439588a5d52b98dc3138646494c6aae136))
+* publish ([f674d85](https://github.com/appium/appium-ios/commit/f674d8563c83ddaf61921464dfa6cc4618ef8e5e))
+* publish ([bd9ba5f](https://github.com/appium/appium-ios/commit/bd9ba5fd86b87035b15023ae46d3bcec928266b5))
+* publish ([859be1d](https://github.com/appium/appium-ios/commit/859be1d7288d86b5b276e621c10dc43ac34b65c0))
+* publish ([1a2b707](https://github.com/appium/appium-ios/commit/1a2b707d67be5de584d65ab3d540504eec1de0cc))
+* publish ([64177b9](https://github.com/appium/appium-ios/commit/64177b9c3543a597629d8310920e515542858ae8))
+* publish ([da9df50](https://github.com/appium/appium-ios/commit/da9df509454bca268192150e4d3302d7f000a5c9))
+* publish ([5ae958e](https://github.com/appium/appium-ios/commit/5ae958e85151476faa49364385c85e000e6ff324))
+* **remotexpc:** bump minimatch to v11 ([#143](https://github.com/appium/appium-ios/issues/143)) ([3ebd661](https://github.com/appium/appium-ios/commit/3ebd6619e6b236cdf2fab8475f1004342bc33fef))
+* **remotexpc:** enable strictNullChecks and fix lint warnings ([#204](https://github.com/appium/appium-ios/issues/204)) ([cef8241](https://github.com/appium/appium-ios/commit/cef824181947941578bf81bd66758d4f36a1ef3f))
+* use AsyncLock from asyncbox instead of async-lock ([#107](https://github.com/appium/appium-ios/issues/107)) ([c6f7784](https://github.com/appium/appium-ios/commit/c6f7784ce933cc5910103b756645e159453964a2))
+* **xcode:** update dependency asyncbox to v7 ([#194](https://github.com/appium/appium-ios/issues/194)) ([8cee6af](https://github.com/appium/appium-ios/commit/8cee6afd5ea6e8998bbe7849e31ce326d613214b))
+
+
 ## [6.1.0](https://github.com/appium/appium-ios/compare/appium-ios-remotexpc@6.0.12...appium-ios-remotexpc@6.1.0) (2026-11-16)
 
 ### Features

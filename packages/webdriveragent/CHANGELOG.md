@@ -3,6 +3,95 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 18.0.0 (2026-11-18)
+
+### ⚠ BREAKING CHANGES
+
+* **webdriveragent:** the package requires the Appium 4 versions of the @appium/* dependencies and Node.js 22.22.2+, 24.15.0+ or 26+.
+
+### Features
+
+* move WebDriverAgent into the monorepo as packages/webdriveragent ([#76](https://github.com/appium/appium-ios/issues/76)) ([e5886f6](https://github.com/appium/appium-ios/commit/e5886f6f2265f4fc94e5c4c35889f67bd09aad96))
+* **webdriveragent:** add Appium 4 support ([3d6a9e5](https://github.com/appium/appium-ios/commit/3d6a9e5e5a48e993658be16cdeeb8b157dbd5650))
+* **webdriveragent:** add hasHinge ([#162](https://github.com/appium/appium-ios/issues/162)) ([6bd7f4c](https://github.com/appium/appium-ios/commit/6bd7f4c2a0f16cfa3e13a0c69ac3e16e512cee77))
+* **webdriveragent:** add route for retrieving pressButton values ([#102](https://github.com/appium/appium-ios/issues/102)) ([5b4eaaa](https://github.com/appium/appium-ios/commit/5b4eaaacc7b97d571ab269f98a4e23396be7bae1))
+
+### Bug Fixes
+
+* compare with lowercase for the direction in scroll ([#148](https://github.com/appium/appium-ios/issues/148)) ([4709a5c](https://github.com/appium/appium-ios/commit/4709a5c85e8d4b437a1641b22e3a1e69bef9d23a))
+* **remote-debugger:** connect real-device clients after listeners are attached and release lost services ([#123](https://github.com/appium/appium-ios/issues/123)) ([c2ffd94](https://github.com/appium/appium-ios/commit/c2ffd94ca4c8d2c1952da80a816f9d8ed3188521))
+* wait for a hittable key only when keyboardWaitTimeout is set ([#93](https://github.com/appium/appium-ios/issues/93)) ([5a3eed4](https://github.com/appium/appium-ios/commit/5a3eed4b07172fce2413f4d55c1686da68fe6140))
+* **webdriveragent:** allow excluding customActions from the JSON page source ([#114](https://github.com/appium/appium-ios/issues/114)) ([8991115](https://github.com/appium/appium-ios/commit/89911153d5e666023fe675d382305d8203fe80e2))
+* **webdriveragent:** cache the screen lookup in the MJPEG server ([#171](https://github.com/appium/appium-ios/issues/171)) ([e764254](https://github.com/appium/appium-ios/commit/e764254f068127669c1ba16d32394836c97307ac))
+* **webdriveragent:** clear screen recording state before attachment cleanup ([#115](https://github.com/appium/appium-ios/issues/115)) ([9caef7e](https://github.com/appium/appium-ios/commit/9caef7ee9a77541a785a5248576fd3266afae4a2))
+* **webdriveragent:** correct hinge angle undershoot on iOS 27.2 simulator ([#152](https://github.com/appium/appium-ios/issues/152)) ([b3ce495](https://github.com/appium/appium-ios/commit/b3ce495b49566f0eebff5192c5698d010e6c0ab1)), closes [#151](https://github.com/appium/appium-ios/issues/151)
+* **webdriveragent:** dispatch Home button HID events on Duo simulators ([#78](https://github.com/appium/appium-ios/issues/78)) ([19ce62f](https://github.com/appium/appium-ios/commit/19ce62f69b657e5b0fe2f7f74545c56f9631beb6)), closes [#85](https://github.com/appium/appium-ios/issues/85)
+* **webdriveragent:** do not embed lib_TestingInterop.dylib on Xcode 26.0-26.3 ([#104](https://github.com/appium/appium-ios/issues/104)) ([a78d1fe](https://github.com/appium/appium-ios/commit/a78d1fee46b483613b2e659936b490573cfc81d6))
+* **webdriveragent:** fall back to vendor HID events for Duo rotation ([#81](https://github.com/appium/appium-ios/issues/81)) ([71d1ae0](https://github.com/appium/appium-ios/commit/71d1ae01dd1cea5b85063ed74c1b51f02134c6c5))
+* **webdriveragent:** keep a late MJPEG frame instead of backing off ([#179](https://github.com/appium/appium-ios/issues/179)) ([e57ef10](https://github.com/appium/appium-ios/commit/e57ef1069c155fbf37a3c223bcc96af7788025b3))
+* **webdriveragent:** preserve detected Safari alert snapshot ([#187](https://github.com/appium/appium-ios/issues/187)) ([a5d3dbb](https://github.com/appium/appium-ios/commit/a5d3dbb9b25fbc5ec5620127e876feae6abed806))
+* **webdriveragent:** preserve gesture display affinity across Duo folding ([#155](https://github.com/appium/appium-ios/issues/155)) ([9481b8b](https://github.com/appium/appium-ios/commit/9481b8b793de734e2e0748c6780460a247c3f515))
+* **webdriveragent:** return keyboard autocorrection and prediction settings as booleans ([#147](https://github.com/appium/appium-ios/issues/147)) ([efb6024](https://github.com/appium/appium-ios/commit/efb602438c37175e32b38b78e632922c21efbabf))
+* **webdriveragent:** shorten lock button press on iOS 27 ([#91](https://github.com/appium/appium-ios/issues/91)) ([e002283](https://github.com/appium/appium-ios/commit/e002283d4b26738b0dae1200a3a639e611101d79))
+* **webdriveragent:** use Home to background watchOS apps ([#84](https://github.com/appium/appium-ios/issues/84)) ([b1dd12e](https://github.com/appium/appium-ios/commit/b1dd12e93d8eb0f6acc0a0addaf8733b2bfb0b19))
+* **webdriveragent:** use the remote Home button to background tvOS apps ([#83](https://github.com/appium/appium-ios/issues/83)) ([2d953f4](https://github.com/appium/appium-ios/commit/2d953f41a598ddcb2ebe10398aecf3164bd00ad4))
+* **webdriveragent:** wait for SpringBoard after background apps resume ([#82](https://github.com/appium/appium-ios/issues/82)) ([b8b0b45](https://github.com/appium/appium-ios/commit/b8b0b45294c47882c3d31c023a9fb6912496518d))
+
+### Performance Improvements
+
+* **webdriveragent:** stop resolving every match again in findElements ([#177](https://github.com/appium/appium-ios/issues/177)) ([ea8354c](https://github.com/appium/appium-ios/commit/ea8354caf2a842a19a82114b8103d7c9446a4e09))
+
+### Code Refactoring
+
+* move HID related implementation in a separate module ([#103](https://github.com/appium/appium-ios/issues/103)) ([701eb60](https://github.com/appium/appium-ios/commit/701eb601455c7ab04c283dbc8a0da055eb7e3199))
+* use ConditionUnmetError instead of message matching ([#169](https://github.com/appium/appium-ios/issues/169)) ([ccaac20](https://github.com/appium/appium-ios/commit/ccaac207cd2e449a821f75dd0881ffc3dfc595e2))
+
+### Miscellaneous Chores
+
+* **deps:** bump @appium/* packages to latest 4.0 betas ([#193](https://github.com/appium/appium-ios/issues/193)) ([de20629](https://github.com/appium/appium-ios/commit/de20629ed0e7b9ec22953f25ba30825541be3ca4))
+* **deps:** Bump axios from 1.18.1 to 1.21.0 ([#130](https://github.com/appium/appium-ios/issues/130)) ([566da80](https://github.com/appium/appium-ios/commit/566da80f6b43711cdc1bc6d4ca2b85937e9b30e4))
+* publish ([582beec](https://github.com/appium/appium-ios/commit/582beec62211b41800a9dd32f8e91cced0228158))
+* publish ([7faad49](https://github.com/appium/appium-ios/commit/7faad493d0a525610746dbeb9075e271d71bf2f1))
+* publish ([d8daebd](https://github.com/appium/appium-ios/commit/d8daebd03095d25df6ea64e7ab409e4e6b0705ab))
+* publish ([e2a754f](https://github.com/appium/appium-ios/commit/e2a754f27f3d2b3c4932a16f71eaa2c49fbcedae))
+* publish ([d7d177f](https://github.com/appium/appium-ios/commit/d7d177f55102776f22794034ff7337b9213610dd))
+* publish ([d3d5b4d](https://github.com/appium/appium-ios/commit/d3d5b4d61cfc16788a9591090cde6e91fa0309bd))
+* publish ([3591f6f](https://github.com/appium/appium-ios/commit/3591f6f311f1770c809df29615a997158bb4fcdd))
+* publish ([670269c](https://github.com/appium/appium-ios/commit/670269c9e17922d05b6d0371626f331b2f046238))
+* publish ([dbf47fc](https://github.com/appium/appium-ios/commit/dbf47fcc59bfd8b70b6b8b2c15b2e099d3530fd0))
+* publish ([3b5525f](https://github.com/appium/appium-ios/commit/3b5525fcefd5b08c57cf571560ab57e9b59aaf36))
+* publish ([09b3159](https://github.com/appium/appium-ios/commit/09b315999d6165e26d34cc9d080846609dacaef5))
+* publish ([9c72898](https://github.com/appium/appium-ios/commit/9c72898744045b9ac9f691af75f50976c59eb208))
+* publish ([83c0253](https://github.com/appium/appium-ios/commit/83c02537ecaaee4964476ba35243e822cc378d00))
+* publish ([b79ff55](https://github.com/appium/appium-ios/commit/b79ff5587b7273c2ad1712a168114ba45641e665))
+* publish ([20c3bde](https://github.com/appium/appium-ios/commit/20c3bde38f8413bd760187c521ace065a62538a6))
+* publish ([efad756](https://github.com/appium/appium-ios/commit/efad756d909958468cc0ed3575ef4a78b74bcbf9))
+* publish ([943e2ef](https://github.com/appium/appium-ios/commit/943e2efdb5d8b26a704d0cef58cb5eec0f37076c))
+* publish ([8dd7d66](https://github.com/appium/appium-ios/commit/8dd7d66de222be81453e34c5141cf257942dd5d1))
+* publish ([9088292](https://github.com/appium/appium-ios/commit/90882926f5dd3e4d34a056312f05787d513d0fd5))
+* publish ([1da0348](https://github.com/appium/appium-ios/commit/1da0348a440d0fa66f1b4b65d0334a9d164bc5ab))
+* publish ([afeb9cd](https://github.com/appium/appium-ios/commit/afeb9cd03af16c7f3cea23633c82d715642c4e58))
+* publish ([83d81c7](https://github.com/appium/appium-ios/commit/83d81c71b44903ff841c9af14f508768ad76fb0d))
+* publish ([c00c18e](https://github.com/appium/appium-ios/commit/c00c18e3e6b9d15069e97b1670065549bef07488))
+* publish ([37208e5](https://github.com/appium/appium-ios/commit/37208e5fb21602149a2016421c33e0cff239091e))
+* publish ([1e3ecf6](https://github.com/appium/appium-ios/commit/1e3ecf666350a1868a196e84bf09cc1fe116cc4a))
+* publish ([d2e17e0](https://github.com/appium/appium-ios/commit/d2e17e0891a6f7258fcb7ebaacdfecc7f410eacc))
+* publish ([81fb72d](https://github.com/appium/appium-ios/commit/81fb72dc3b3f23f23c804f1969f0c1eb19c8a7a2))
+* publish ([e44d107](https://github.com/appium/appium-ios/commit/e44d107586127a4b666f81688dbcd4bcf61b6cd3))
+* publish ([9dd1aa6](https://github.com/appium/appium-ios/commit/9dd1aa639f56e3b89c8011d7dd4cf5bb7e7fa2c6))
+* publish ([3369e14](https://github.com/appium/appium-ios/commit/3369e1484f3cb822b22f2fd4c06ddc9c3d48c0a6))
+* publish ([7585a1f](https://github.com/appium/appium-ios/commit/7585a1f072ba795cf923708e91db890ef3a2dfb4))
+* publish ([9acf30a](https://github.com/appium/appium-ios/commit/9acf30a6e265ea83362af63100d1b66e8a836f10))
+* publish ([9a31ba1](https://github.com/appium/appium-ios/commit/9a31ba1944198c3a718165153394f53ab6b2b63f))
+* publish ([1b468c4](https://github.com/appium/appium-ios/commit/1b468c4e8be622abce445c381299d8c5151ace85))
+* publish ([396c3ea](https://github.com/appium/appium-ios/commit/396c3ea39a609981f73330cc27d58bee33258a6e))
+* publish ([271520b](https://github.com/appium/appium-ios/commit/271520ba1c52782d295ac433ac80db118f0cd86e))
+* use AsyncLock from asyncbox instead of async-lock ([#107](https://github.com/appium/appium-ios/issues/107)) ([c6f7784](https://github.com/appium/appium-ios/commit/c6f7784ce933cc5910103b756645e159453964a2))
+* **webdriveragent:** fix lint warnings ([#198](https://github.com/appium/appium-ios/issues/198)) ([b483c69](https://github.com/appium/appium-ios/commit/b483c6986513754ca0683e9d7a2c00cdd254188e))
+* **xcode:** update dependency asyncbox to v7 ([#194](https://github.com/appium/appium-ios/issues/194)) ([8cee6af](https://github.com/appium/appium-ios/commit/8cee6afd5ea6e8998bbe7849e31ce326d613214b))
+* **xcode:** update dependency teen_process to v5 ([#195](https://github.com/appium/appium-ios/issues/195)) ([35aa451](https://github.com/appium/appium-ios/commit/35aa45124a7ced8a0bf6e7cb8ba7358a816adc20))
+
+
 ## [17.0.11](https://github.com/appium/appium-ios/compare/appium-webdriveragent@17.0.10...appium-webdriveragent@17.0.11) (2026-11-16)
 
 **Note:** Version bump only for package appium-webdriveragent

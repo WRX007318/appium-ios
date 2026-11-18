@@ -3,6 +3,53 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 9.0.0 (2026-11-18)
+
+### ⚠ BREAKING CHANGES
+
+* **xcode:** the package requires the Appium 4 versions of the @appium/* dependencies and Node.js 22.22.2+, 24.15.0+ or 26+.
+
+### Features
+
+* Restore &#x60;appium-ios&#x60; monorepo to a working state ([#7](https://github.com/appium/appium-ios/issues/7)) ([80d12e2](https://github.com/appium/appium-ios/commit/80d12e2498fbad7c08eea0ddb868196f00af0840))
+* **xcode:** add Appium 4 support ([4b980a9](https://github.com/appium/appium-ios/commit/4b980a969b3dd753151f46a230004b9941ff966f))
+
+### Code Refactoring
+
+* use ConditionUnmetError instead of message matching ([#169](https://github.com/appium/appium-ios/issues/169)) ([ccaac20](https://github.com/appium/appium-ios/commit/ccaac207cd2e449a821f75dd0881ffc3dfc595e2))
+
+### Miscellaneous Chores
+
+* adapt code to updated dependencies ([08c82dd](https://github.com/appium/appium-ios/commit/08c82ddb2eb4c2fdbc150372510e537fa468bb05))
+* dedupe redundant files; update build matrix ([ca2e491](https://github.com/appium/appium-ios/commit/ca2e491558bb5dde6bd15fae6a4337ea05a6b3c8))
+* **deps:** bump @appium/* packages to latest 4.0 betas ([#193](https://github.com/appium/appium-ios/issues/193)) ([de20629](https://github.com/appium/appium-ios/commit/de20629ed0e7b9ec22953f25ba30825541be3ca4))
+* **deps:** Bump semver from 7.7.2 to 7.8.5 ([#10](https://github.com/appium/appium-ios/issues/10)) ([eae5017](https://github.com/appium/appium-ios/commit/eae501770232c9bc31d751a53c46978628412554))
+* **deps:** Bump semver from 7.7.2 to 7.8.5 ([#20](https://github.com/appium/appium-ios/issues/20)) ([d0be872](https://github.com/appium/appium-ios/commit/d0be8721de74f327613ce17ad1881046d9ede373))
+* ensure Dependabot preserves version ranges ([#24](https://github.com/appium/appium-ios/issues/24)) ([95e4e1a](https://github.com/appium/appium-ios/commit/95e4e1a4703f8ca833f01ecf2af75f4696d98043))
+* fix linting ([db7ba60](https://github.com/appium/appium-ios/commit/db7ba606d55c5b27d96da74590f35263973b028e))
+* Make Dependabot commits conventional ([a490401](https://github.com/appium/appium-ios/commit/a490401e2a9002c8525e9d4ca5621c3cd43401de))
+* make npm lint script also check yaml ([9f34455](https://github.com/appium/appium-ios/commit/9f34455609d48fceb25f43622bdfbc793471b612))
+* **package:** update dependencies ([3d55394](https://github.com/appium/appium-ios/commit/3d553941c01e5315ce4866e6cb8fc0b7b89dc281))
+* publish ([d3d5b4d](https://github.com/appium/appium-ios/commit/d3d5b4d61cfc16788a9591090cde6e91fa0309bd))
+* publish ([3591f6f](https://github.com/appium/appium-ios/commit/3591f6f311f1770c809df29615a997158bb4fcdd))
+* publish ([dbf47fc](https://github.com/appium/appium-ios/commit/dbf47fcc59bfd8b70b6b8b2c15b2e099d3530fd0))
+* publish ([3b5525f](https://github.com/appium/appium-ios/commit/3b5525fcefd5b08c57cf571560ab57e9b59aaf36))
+* publish ([9c72898](https://github.com/appium/appium-ios/commit/9c72898744045b9ac9f691af75f50976c59eb208))
+* publish ([efad756](https://github.com/appium/appium-ios/commit/efad756d909958468cc0ed3575ef4a78b74bcbf9))
+* publish ([81fb72d](https://github.com/appium/appium-ios/commit/81fb72dc3b3f23f23c804f1969f0c1eb19c8a7a2))
+* publish ([da9df50](https://github.com/appium/appium-ios/commit/da9df509454bca268192150e4d3302d7f000a5c9))
+* publish ([c891212](https://github.com/appium/appium-ios/commit/c89121221cab1f00280a93f49e601edb7f387cbf))
+* publish ([f63d306](https://github.com/appium/appium-ios/commit/f63d30608de059eb3cf932800fd95e45a1b16b1c))
+* publish ([9840077](https://github.com/appium/appium-ios/commit/98400770983bf7a63352073a7523ff6e81d8f0f0))
+* Update Dependabot config file ([#62](https://github.com/appium/appium-ios/issues/62)) ([60da4c8](https://github.com/appium/appium-ios/commit/60da4c8a45faab2077c73d5c6735c503ee8d5ebd))
+* update module references, manifests, lerna config ([e38c07c](https://github.com/appium/appium-ios/commit/e38c07c18cef7c14db8468446df8a52cdee217cc))
+* upgrade sync-monorepo-packages, and sync the packages ([1facbd8](https://github.com/appium/appium-ios/commit/1facbd85b6ad2b03afbd6649048277287d3ce990))
+* use AsyncLock from asyncbox instead of async-lock ([#107](https://github.com/appium/appium-ios/issues/107)) ([c6f7784](https://github.com/appium/appium-ios/commit/c6f7784ce933cc5910103b756645e159453964a2))
+* use caret ranges instead of exact versions for dependencies ([#13](https://github.com/appium/appium-ios/issues/13)) ([52d051b](https://github.com/appium/appium-ios/commit/52d051b187e2735ec096994d498eba7b0dfc02dd))
+* **xcode:** update dependency asyncbox to v7 ([#194](https://github.com/appium/appium-ios/issues/194)) ([8cee6af](https://github.com/appium/appium-ios/commit/8cee6afd5ea6e8998bbe7849e31ce326d613214b))
+* **xcode:** update dependency teen_process to v5 ([#195](https://github.com/appium/appium-ios/issues/195)) ([35aa451](https://github.com/appium/appium-ios/commit/35aa45124a7ced8a0bf6e7cb8ba7358a816adc20))
+
+
 ## [8.0.4](https://github.com/appium/appium-ios/compare/appium-xcode@8.0.3...appium-xcode@8.0.4) (2026-11-14)
 
 ### Miscellaneous Chores

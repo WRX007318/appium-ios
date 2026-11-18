@@ -3,6 +3,32 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 11.0.0 (2026-11-18)
+
+### ⚠ BREAKING CHANGES
+
+* **simctl:** the package requires the Appium 4 versions of the @appium/* dependencies and Node.js 22.22.2+, 24.15.0+ or 26+.
+
+### Features
+
+* move node-simctl into the monorepo as packages/simctl ([#181](https://github.com/appium/appium-ios/issues/181)) ([67e719e](https://github.com/appium/appium-ios/commit/67e719e91453293a6836339d64191fa6cb719e38))
+* **simctl:** add Appium 4 support ([d1ace87](https://github.com/appium/appium-ios/commit/d1ace87b3cdec980616bfac69bb881b1be823745))
+
+### Miscellaneous Chores
+
+* **deps:** bump @appium/* packages to latest 4.0 betas ([#193](https://github.com/appium/appium-ios/issues/193)) ([de20629](https://github.com/appium/appium-ios/commit/de20629ed0e7b9ec22953f25ba30825541be3ca4))
+* drop rimraf dependency in favor of node:fs ([#192](https://github.com/appium/appium-ios/issues/192)) ([7416dbf](https://github.com/appium/appium-ios/commit/7416dbff1108df8bf8e1e8b5192d05302efa0db8))
+* publish ([d3d5b4d](https://github.com/appium/appium-ios/commit/d3d5b4d61cfc16788a9591090cde6e91fa0309bd))
+* publish ([3591f6f](https://github.com/appium/appium-ios/commit/3591f6f311f1770c809df29615a997158bb4fcdd))
+* publish ([dbf47fc](https://github.com/appium/appium-ios/commit/dbf47fcc59bfd8b70b6b8b2c15b2e099d3530fd0))
+* publish ([fa606e8](https://github.com/appium/appium-ios/commit/fa606e89f7d0cbf09a3b0f388aa62c043e8cbd90))
+* publish ([3b5525f](https://github.com/appium/appium-ios/commit/3b5525fcefd5b08c57cf571560ab57e9b59aaf36))
+* publish ([9c72898](https://github.com/appium/appium-ios/commit/9c72898744045b9ac9f691af75f50976c59eb208))
+* publish ([cb312eb](https://github.com/appium/appium-ios/commit/cb312eb122f4f031c588601ab6c3ffce5e821f82))
+* **xcode:** update dependency asyncbox to v7 ([#194](https://github.com/appium/appium-ios/issues/194)) ([8cee6af](https://github.com/appium/appium-ios/commit/8cee6afd5ea6e8998bbe7849e31ce326d613214b))
+* **xcode:** update dependency teen_process to v5 ([#195](https://github.com/appium/appium-ios/issues/195)) ([35aa451](https://github.com/appium/appium-ios/commit/35aa45124a7ced8a0bf6e7cb8ba7358a816adc20))
+
+
 ## [10.0.5](https://github.com/appium/appium-ios/compare/node-simctl@10.0.4...node-simctl@10.0.5) (2026-11-14)
 
 ### Miscellaneous Chores

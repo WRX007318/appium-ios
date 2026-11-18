@@ -3,6 +3,66 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 3.0.0 (2026-11-18)
+
+### ⚠ BREAKING CHANGES
+
+* **coresim:** the package requires the Appium 4 versions of the @appium/* dependencies and Node.js 22.22.2+, 24.15.0+ or 26+.
+
+### Features
+
+* add opt-in boot-scoped screenshot display cache ([#51](https://github.com/appium/appium-ios/issues/51)) ([692a1f7](https://github.com/appium/appium-ios/commit/692a1f77bfbc64a18184a83282a8d2695ffe8d0a))
+* apply DeviceHub pasteboard sync changes without rebooting the simulator ([#26](https://github.com/appium/appium-ios/issues/26)) ([5c6eabb](https://github.com/appium/appium-ios/commit/5c6eabbf9cfb900563ed816a6392f48db11ef18e))
+* **coresim:** add Appium 4 support ([4769498](https://github.com/appium/appium-ios/commit/47694981f144038a20fe7e59c708bec0559040dc))
+* **coresim:** add host-side simulator HID and Duo controls ([#109](https://github.com/appium/appium-ios/issues/109)) ([15f1dd1](https://github.com/appium/appium-ios/commit/15f1dd164f15f243e4a88889964bc2b6b7d2adc9))
+* **coresim:** add VideoStream.requestKeyFrame() ([#211](https://github.com/appium/appium-ios/issues/211)) ([82b7d76](https://github.com/appium/appium-ios/commit/82b7d76ad6817aefb4057ab0eeb3ccd8d420917c))
+* move appium/coresim into the monorepo as packages/coresim ([#16](https://github.com/appium/appium-ios/issues/16)) ([a1acd55](https://github.com/appium/appium-ios/commit/a1acd556f716595d120bc2bf92b317ad84cbfad4))
+* restore the notifications permission and the &#x60;all&#x60; permissions key ([#38](https://github.com/appium/appium-ios/issues/38)) ([d374250](https://github.com/appium/appium-ios/commit/d374250c24a99d8f91b6d83a77afcc771e00c9b1))
+* support numeric display IDs across capture APIs ([#49](https://github.com/appium/appium-ios/issues/49)) ([ca7649a](https://github.com/appium/appium-ios/commit/ca7649addf546a023bc0d601f784f801b8d99b56))
+
+### Bug Fixes
+
+* **coresim:** include the failure reason and underlying errors in operation errors ([#163](https://github.com/appium/appium-ios/issues/163)) ([0032a91](https://github.com/appium/appium-ios/commit/0032a918d11d6d883f2896b907b0fbca2a734353))
+* **coresim:** poll the audio tap&#x27;s process list off the IO queue ([#216](https://github.com/appium/appium-ios/issues/216)) ([e0e08af](https://github.com/appium/appium-ios/commit/e0e08af87f01f1186beb6f7cfb2d7f1a9d97998a))
+
+### Performance Improvements
+
+* **coresim:** reuse one CIContext across getScreenshot calls ([#44](https://github.com/appium/appium-ios/issues/44)) ([ecf353b](https://github.com/appium/appium-ios/commit/ecf353bad640c43c85cf8fa26cb7759b8a9570a0))
+
+### Code Refactoring
+
+* **coresim:** split notifications store handling out of permissions ([#68](https://github.com/appium/appium-ios/issues/68)) ([7808a34](https://github.com/appium/appium-ios/commit/7808a34bd5c57918414abed62279be31ac18e353))
+* use ConditionUnmetError instead of message matching ([#169](https://github.com/appium/appium-ios/issues/169)) ([ccaac20](https://github.com/appium/appium-ios/commit/ccaac207cd2e449a821f75dd0881ffc3dfc595e2))
+
+### Miscellaneous Chores
+
+* **coresim:** fix lint warnings ([#201](https://github.com/appium/appium-ios/issues/201)) ([32c9a87](https://github.com/appium/appium-ios/commit/32c9a8705f9f2475ca6eb4c76b00300be1bbf3bc))
+* **deps:** bump @appium/* packages to latest 4.0 betas ([#193](https://github.com/appium/appium-ios/issues/193)) ([de20629](https://github.com/appium/appium-ios/commit/de20629ed0e7b9ec22953f25ba30825541be3ca4))
+* ensure Dependabot preserves version ranges ([#24](https://github.com/appium/appium-ios/issues/24)) ([95e4e1a](https://github.com/appium/appium-ios/commit/95e4e1a4703f8ca833f01ecf2af75f4696d98043))
+* publish ([582beec](https://github.com/appium/appium-ios/commit/582beec62211b41800a9dd32f8e91cced0228158))
+* publish ([7faad49](https://github.com/appium/appium-ios/commit/7faad493d0a525610746dbeb9075e271d71bf2f1))
+* publish ([d3d5b4d](https://github.com/appium/appium-ios/commit/d3d5b4d61cfc16788a9591090cde6e91fa0309bd))
+* publish ([670269c](https://github.com/appium/appium-ios/commit/670269c9e17922d05b6d0371626f331b2f046238))
+* publish ([dbf47fc](https://github.com/appium/appium-ios/commit/dbf47fcc59bfd8b70b6b8b2c15b2e099d3530fd0))
+* publish ([3b5525f](https://github.com/appium/appium-ios/commit/3b5525fcefd5b08c57cf571560ab57e9b59aaf36))
+* publish ([9c72898](https://github.com/appium/appium-ios/commit/9c72898744045b9ac9f691af75f50976c59eb208))
+* publish ([efad756](https://github.com/appium/appium-ios/commit/efad756d909958468cc0ed3575ef4a78b74bcbf9))
+* publish ([943e2ef](https://github.com/appium/appium-ios/commit/943e2efdb5d8b26a704d0cef58cb5eec0f37076c))
+* publish ([9088292](https://github.com/appium/appium-ios/commit/90882926f5dd3e4d34a056312f05787d513d0fd5))
+* publish ([1e3ecf6](https://github.com/appium/appium-ios/commit/1e3ecf666350a1868a196e84bf09cc1fe116cc4a))
+* publish ([81fb72d](https://github.com/appium/appium-ios/commit/81fb72dc3b3f23f23c804f1969f0c1eb19c8a7a2))
+* publish ([9dce08c](https://github.com/appium/appium-ios/commit/9dce08cd8d4162196de0504f57500ec18f83b1c8))
+* publish ([4bf675f](https://github.com/appium/appium-ios/commit/4bf675f3a29cd529f5ccbc4326a8b6db2dbc7358))
+* publish ([9093de3](https://github.com/appium/appium-ios/commit/9093de3b79fba810459e0cb42c1aee3e9d30fbe5))
+* publish ([f674d85](https://github.com/appium/appium-ios/commit/f674d8563c83ddaf61921464dfa6cc4618ef8e5e))
+* publish ([ae92cce](https://github.com/appium/appium-ios/commit/ae92cce2dddf179de80385f2f60de0068ad43a1a))
+* publish ([da9df50](https://github.com/appium/appium-ios/commit/da9df509454bca268192150e4d3302d7f000a5c9))
+* publish ([f63d306](https://github.com/appium/appium-ios/commit/f63d30608de059eb3cf932800fd95e45a1b16b1c))
+* publish ([ea08521](https://github.com/appium/appium-ios/commit/ea08521b1a06e086e979b53002884710a027a12d))
+* use AsyncLock from asyncbox instead of async-lock ([#107](https://github.com/appium/appium-ios/issues/107)) ([c6f7784](https://github.com/appium/appium-ios/commit/c6f7784ce933cc5910103b756645e159453964a2))
+* **xcode:** update dependency asyncbox to v7 ([#194](https://github.com/appium/appium-ios/issues/194)) ([8cee6af](https://github.com/appium/appium-ios/commit/8cee6afd5ea6e8998bbe7849e31ce326d613214b))
+
+
 ## [2.1.0](https://github.com/appium/appium-ios/compare/@appium/coresim@2.0.5...@appium/coresim@2.1.0) (2026-11-16)
 
 ### Features

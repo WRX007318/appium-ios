@@ -3,6 +3,72 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 12.0.0 (2026-11-18)
+
+### ⚠ BREAKING CHANGES
+
+* **simulator:** the package requires the Appium 4 versions of the @appium/* dependencies and Node.js 22.22.2+, 24.15.0+ or 26+.
+
+### Features
+
+* add opt-in boot-scoped screenshot display cache ([#51](https://github.com/appium/appium-ios/issues/51)) ([692a1f7](https://github.com/appium/appium-ios/commit/692a1f77bfbc64a18184a83282a8d2695ffe8d0a))
+* apply DeviceHub pasteboard sync changes without rebooting the simulator ([#26](https://github.com/appium/appium-ios/issues/26)) ([5c6eabb](https://github.com/appium/appium-ios/commit/5c6eabbf9cfb900563ed816a6392f48db11ef18e))
+* **coresim:** add host-side simulator HID and Duo controls ([#109](https://github.com/appium/appium-ios/issues/109)) ([15f1dd1](https://github.com/appium/appium-ios/commit/15f1dd164f15f243e4a88889964bc2b6b7d2adc9))
+* **coresim:** add VideoStream.requestKeyFrame() ([#211](https://github.com/appium/appium-ios/issues/211)) ([82b7d76](https://github.com/appium/appium-ios/commit/82b7d76ad6817aefb4057ab0eeb3ccd8d420917c))
+* move appium-ios-simulator into the monorepo as packages/simulator ([#17](https://github.com/appium/appium-ios/issues/17)) ([e034ace](https://github.com/appium/appium-ios/commit/e034ace450236e91593d1d7f1e4c60781ed2e8a2))
+* restore the notifications permission and the &#x60;all&#x60; permissions key ([#38](https://github.com/appium/appium-ios/issues/38)) ([d374250](https://github.com/appium/appium-ios/commit/d374250c24a99d8f91b6d83a77afcc771e00c9b1))
+* **simulator:** add Appium 4 support ([8b4d8ec](https://github.com/appium/appium-ios/commit/8b4d8ecca5d4220db1f25f87fed54c9ceaeb56da))
+* support duo ([#35](https://github.com/appium/appium-ios/issues/35)) ([aea04e7](https://github.com/appium/appium-ios/commit/aea04e736bb8e698bf8be49e8e6c4d02c19fa73b))
+* support numeric display IDs across capture APIs ([#49](https://github.com/appium/appium-ios/issues/49)) ([ca7649a](https://github.com/appium/appium-ios/commit/ca7649addf546a023bc0d601f784f801b8d99b56))
+* support simulatorPasteboardAutomaticSync and connect hardware preference for Device Hub ([#25](https://github.com/appium/appium-ios/issues/25)) ([b7a3e57](https://github.com/appium/appium-ios/commit/b7a3e578bc4a25e033a1d47c1e560a4aef45950d))
+
+### Bug Fixes
+
+* **simulator:** hint at Full Disk Access when DeviceHub preferences are denied ([#161](https://github.com/appium/appium-ios/issues/161)) ([ff8eed9](https://github.com/appium/appium-ios/commit/ff8eed96742db2c24cd5fdd98ba37ea713fc2591))
+
+### Code Refactoring
+
+* **coresim:** split notifications store handling out of permissions ([#68](https://github.com/appium/appium-ios/issues/68)) ([7808a34](https://github.com/appium/appium-ios/commit/7808a34bd5c57918414abed62279be31ac18e353))
+* use ConditionUnmetError instead of message matching ([#169](https://github.com/appium/appium-ios/issues/169)) ([ccaac20](https://github.com/appium/appium-ios/commit/ccaac207cd2e449a821f75dd0881ffc3dfc595e2))
+
+### Miscellaneous Chores
+
+* **deps:** bump @appium/* packages to latest 4.0 betas ([#193](https://github.com/appium/appium-ios/issues/193)) ([de20629](https://github.com/appium/appium-ios/commit/de20629ed0e7b9ec22953f25ba30825541be3ca4))
+* **deps:** Bump semver from 7.7.2 to 7.8.5 ([#20](https://github.com/appium/appium-ios/issues/20)) ([d0be872](https://github.com/appium/appium-ios/commit/d0be8721de74f327613ce17ad1881046d9ede373))
+* ensure Dependabot preserves version ranges ([#24](https://github.com/appium/appium-ios/issues/24)) ([95e4e1a](https://github.com/appium/appium-ios/commit/95e4e1a4703f8ca833f01ecf2af75f4696d98043))
+* publish ([582beec](https://github.com/appium/appium-ios/commit/582beec62211b41800a9dd32f8e91cced0228158))
+* publish ([7faad49](https://github.com/appium/appium-ios/commit/7faad493d0a525610746dbeb9075e271d71bf2f1))
+* publish ([d3d5b4d](https://github.com/appium/appium-ios/commit/d3d5b4d61cfc16788a9591090cde6e91fa0309bd))
+* publish ([3591f6f](https://github.com/appium/appium-ios/commit/3591f6f311f1770c809df29615a997158bb4fcdd))
+* publish ([670269c](https://github.com/appium/appium-ios/commit/670269c9e17922d05b6d0371626f331b2f046238))
+* publish ([dbf47fc](https://github.com/appium/appium-ios/commit/dbf47fcc59bfd8b70b6b8b2c15b2e099d3530fd0))
+* publish ([fa606e8](https://github.com/appium/appium-ios/commit/fa606e89f7d0cbf09a3b0f388aa62c043e8cbd90))
+* publish ([3b5525f](https://github.com/appium/appium-ios/commit/3b5525fcefd5b08c57cf571560ab57e9b59aaf36))
+* publish ([9c72898](https://github.com/appium/appium-ios/commit/9c72898744045b9ac9f691af75f50976c59eb208))
+* publish ([efad756](https://github.com/appium/appium-ios/commit/efad756d909958468cc0ed3575ef4a78b74bcbf9))
+* publish ([f071832](https://github.com/appium/appium-ios/commit/f0718320497124ce4a68c6dba8a4afbd4401104c))
+* publish ([943e2ef](https://github.com/appium/appium-ios/commit/943e2efdb5d8b26a704d0cef58cb5eec0f37076c))
+* publish ([a2baf83](https://github.com/appium/appium-ios/commit/a2baf839b8083f4e0cb4e5bfb67fb9330980cbc4))
+* publish ([9088292](https://github.com/appium/appium-ios/commit/90882926f5dd3e4d34a056312f05787d513d0fd5))
+* publish ([1e3ecf6](https://github.com/appium/appium-ios/commit/1e3ecf666350a1868a196e84bf09cc1fe116cc4a))
+* publish ([81fb72d](https://github.com/appium/appium-ios/commit/81fb72dc3b3f23f23c804f1969f0c1eb19c8a7a2))
+* publish ([9dce08c](https://github.com/appium/appium-ios/commit/9dce08cd8d4162196de0504f57500ec18f83b1c8))
+* publish ([4bf675f](https://github.com/appium/appium-ios/commit/4bf675f3a29cd529f5ccbc4326a8b6db2dbc7358))
+* publish ([9093de3](https://github.com/appium/appium-ios/commit/9093de3b79fba810459e0cb42c1aee3e9d30fbe5))
+* publish ([f674d85](https://github.com/appium/appium-ios/commit/f674d8563c83ddaf61921464dfa6cc4618ef8e5e))
+* publish ([3f0acfb](https://github.com/appium/appium-ios/commit/3f0acfbf69aab62b9fea2ca1fcf2deeb32337f7b))
+* publish ([ae92cce](https://github.com/appium/appium-ios/commit/ae92cce2dddf179de80385f2f60de0068ad43a1a))
+* publish ([956b764](https://github.com/appium/appium-ios/commit/956b764880be10106844d74daa7fe07339dbb254))
+* publish ([da9df50](https://github.com/appium/appium-ios/commit/da9df509454bca268192150e4d3302d7f000a5c9))
+* publish ([c891212](https://github.com/appium/appium-ios/commit/c89121221cab1f00280a93f49e601edb7f387cbf))
+* publish ([f63d306](https://github.com/appium/appium-ios/commit/f63d30608de059eb3cf932800fd95e45a1b16b1c))
+* **simulator:** drop unused pem dependency ([#191](https://github.com/appium/appium-ios/issues/191)) ([e84f40f](https://github.com/appium/appium-ios/commit/e84f40fb8e15c69ac599944d3283dd4a843addc2))
+* **simulator:** fix lint warnings ([#196](https://github.com/appium/appium-ios/issues/196)) ([9064e74](https://github.com/appium/appium-ios/commit/9064e74f92a7d9991be5b1091a28dc506491c0e5))
+* use AsyncLock from asyncbox instead of async-lock ([#107](https://github.com/appium/appium-ios/issues/107)) ([c6f7784](https://github.com/appium/appium-ios/commit/c6f7784ce933cc5910103b756645e159453964a2))
+* **xcode:** update dependency asyncbox to v7 ([#194](https://github.com/appium/appium-ios/issues/194)) ([8cee6af](https://github.com/appium/appium-ios/commit/8cee6afd5ea6e8998bbe7849e31ce326d613214b))
+* **xcode:** update dependency teen_process to v5 ([#195](https://github.com/appium/appium-ios/issues/195)) ([35aa451](https://github.com/appium/appium-ios/commit/35aa45124a7ced8a0bf6e7cb8ba7358a816adc20))
+
+
 ## [11.1.0](https://github.com/appium/appium-ios/compare/appium-ios-simulator@11.0.7...appium-ios-simulator@11.1.0) (2026-11-16)
 
 ### Features
